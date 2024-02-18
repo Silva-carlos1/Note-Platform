@@ -1,5 +1,4 @@
 import { ChangeEvent, useState } from "react";
-import logo from "./assets/logo.svg";
 import { NewNoteCard } from "./components/new-note-card";
 import { NoteCard } from "./components/note-card";
 
@@ -36,6 +35,16 @@ export function App() {
     localStorage.setItem("notes", JSON.stringify(notesArray));
   }
 
+  function onNoteDeleted(id: string) {
+    const notesArray = notes.filter(note => {
+      return note.id !== id
+    })
+
+    setNotes(notesArray)
+
+    localStorage.setItem('notes', JSON.stringify(notesArray));
+  }
+
   function handleSearch(event: ChangeEvent<HTMLInputElement>) {
     const query = event.target.value;
 
@@ -48,7 +57,7 @@ export function App() {
 
   return (
     <div className="mx-auto max-w-6xl my-12 space-y-6 px-5">
-      <img src={logo} alt="NLW Export" />
+      
 
       <form className="w-full">
         <input
@@ -65,7 +74,7 @@ export function App() {
         <NewNoteCard onNoteCreated={OnNoteCreated} />
 
         {filteredNotes.map((note) => {
-          return <NoteCard key={note.id} note={note} />;
+          return <NoteCard key={note.id} note={note} onNoteDeleted={onNoteDeleted} />;
         })}
       </div>
     </div>
